@@ -5,6 +5,7 @@ import requests
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://ollama:11434")
 CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
+EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "bge-m3")
 
 MANUAL_SCHEMA = {
     "type": "object",
@@ -31,13 +32,13 @@ class AIError(Exception):
     """Errore nella comunicazione con il modello di AI."""
 
 
-def chat(messages, schema=None, timeout=300):
+def chat(messages, schema=None, temperature=0.4, timeout=300):
     """Invia una conversazione a Ollama e restituisce il testo della risposta."""
     payload = {
         "model": CHAT_MODEL,
         "messages": messages,
         "stream": False,
-        "options": {"temperature": 0.4},
+        "options": {"temperature": temperature},
     }
     if schema:
         payload["format"] = schema
@@ -91,3 +92,17 @@ def generate_manual_data(topic, sections=4):
 
     data["sections"] = data["sections"][:sections]
     return data
+
+def embed(texts, timeout=120):
+    """Trasforma una lista di testi in una lista di vettori."""
+    try:
+        response = requests.post(
+            f"{OLLAMA_URL}/api/embed",
+            json={"model": EMBED_MODEL, "input": texts},
+            timeout=timeout,
+        )
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        raise AIError(f"Impossibile calcolare gli embedding: {exc}") from exc
+
+    return response.json()["embeddings"]

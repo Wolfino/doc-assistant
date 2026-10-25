@@ -3,6 +3,7 @@ from django.db import transaction
 
 from manuals.ai import AIError, generate_manual_data
 from manuals.models import Manual, Section
+from manuals.rag import index_sections
 
 
 class Command(BaseCommand):
@@ -31,3 +32,9 @@ class Command(BaseCommand):
                 )
 
         self.stdout.write(self.style.SUCCESS(f"Creato: {manual.title} ({len(data['sections'])} sezioni)"))
+
+        try:
+            count = index_sections(manual.sections.all())
+            self.stdout.write(f"Sezioni indicizzate: {count}")
+        except AIError as exc:
+            self.stderr.write(f"Manuale salvato, ma indicizzazione non riuscita: {exc}")

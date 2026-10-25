@@ -6,6 +6,7 @@ from .models import Manual, Section
 class SectionInline(admin.StackedInline):
     model = Section
     extra = 1
+    exclude = ["embedding"]
 
 
 @admin.register(Manual)
