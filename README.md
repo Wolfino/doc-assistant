@@ -70,7 +70,7 @@ The model is called through Ollama's `/api/chat` endpoint with a **JSON schema**
 ### Setup
 
 ```bash
-git clone https://github.com/<your-username>/doc-assistant.git
+git clone https://github.com/Wolfino/doc-assistant.git
 cd doc-assistant
 cp .env.example .env            # then set your own password
 
