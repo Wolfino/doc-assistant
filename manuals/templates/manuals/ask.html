@@ -1,0 +1,30 @@
+{% extends "manuals/base.html" %}
+{% block title %}Chiedi ai manuali{% endblock %}
+{% block content %}
+  <h1>Chiedi ai manuali</h1>
+  <form method="post" onsubmit="this.querySelector('button').setAttribute('aria-busy', 'true')">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Chiedi</button>
+  </form>
+
+  {% if answer %}
+    <article>
+      <header><strong>Risposta</strong></header>
+      {{ answer|linebreaks }}
+      {% if sources %}
+        <footer>
+          <strong>Fonti</strong>
+          <ol>
+            {% for section in sources %}
+              <li>
+                <a href="{% url 'manuals:detail' section.manual.pk %}">{{ section.manual.title }}</a>
+                - {{ section.title }} <small>(distanza {{ section.distance|floatformat:3 }})</small>
+              </li>
+            {% endfor %}
+          </ol>
+        </footer>
+      {% endif %}
+    </article>
+  {% endif %}
+{% endblock %}

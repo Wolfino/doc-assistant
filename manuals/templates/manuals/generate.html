@@ -1,0 +1,11 @@
+{% extends "manuals/base.html" %}
+{% block title %}Genera manuale{% endblock %}
+{% block content %}
+  <h1>Genera un manuale con l'AI</h1>
+  <form method="post" onsubmit="this.querySelector('button').setAttribute('aria-busy', 'true')">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Genera</button>
+  </form>
+  <small>La generazione richiede da qualche secondo a un minuto.</small>
+{% endblock %}

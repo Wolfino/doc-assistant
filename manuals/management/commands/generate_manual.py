@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.db import transaction
 
-from manuals.ai import AIError, generate_manual_data
-from manuals.models import Manual, Section
-from manuals.rag import index_sections
+from manuals.ai import AIError
+from manuals.services import create_manual_with_ai
 
 
 class Command(BaseCommand):
@@ -15,26 +13,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(f"Generazione in corso: {options['topic']}...")
-
         try:
-            data = generate_manual_data(options["topic"], options["sections"])
+            manual = create_manual_with_ai(options["topic"], options["sections"])
         except AIError as exc:
             raise CommandError(str(exc)) from exc
-
-        with transaction.atomic():
-            manual = Manual.objects.create(title=data["title"], description=data["description"])
-            for order, section in enumerate(data["sections"], start=1):
-                Section.objects.create(
-                    manual=manual,
-                    title=section["title"],
-                    content=section["content"],
-                    order=order,
-                )
-
-        self.stdout.write(self.style.SUCCESS(f"Creato: {manual.title} ({len(data['sections'])} sezioni)"))
-
-        try:
-            count = index_sections(manual.sections.all())
-            self.stdout.write(f"Sezioni indicizzate: {count}")
-        except AIError as exc:
-            self.stderr.write(f"Manuale salvato, ma indicizzazione non riuscita: {exc}")
+        self.stdout.write(self.style.SUCCESS(f"Creato e indicizzato: {manual.title}"))

@@ -1,0 +1,119 @@
+/* Palette "carta di giornale" */
+:root {
+  --paper: #faf7f2;
+  --card: #fffdf9;
+  --ink: #2f2a25;
+  --muted: #7d7266;
+  --rule: #e6dfd4;
+  --accent: #6b7f99;
+  --accent-dark: #55687f;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+
+:root {
+  --pico-background-color: var(--paper);
+  --pico-color: var(--ink);
+  --pico-muted-color: var(--muted);
+  --pico-muted-border-color: var(--rule);
+  --pico-card-background-color: var(--card);
+  --pico-card-sectioning-background-color: var(--paper);
+  --pico-form-element-background-color: var(--card);
+  --pico-primary: var(--accent);
+  --pico-primary-background: var(--accent);
+  --pico-primary-border: var(--accent);
+  --pico-primary-hover: var(--accent-dark);
+  --pico-primary-hover-background: var(--accent-dark);
+  --pico-primary-hover-border: var(--accent-dark);
+  --pico-border-radius: 0.4rem;
+}
+
+/* Titoli con le grazie, come un giornale */
+h1, h2, h3 {
+  font-family: var(--serif);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Barra di navigazione */
+header.container {
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2rem;
+}
+
+/* Schede: ombra leggera al passaggio del mouse */
+article {
+  box-shadow: none;
+  border: 1px solid var(--rule);
+  transition: box-shadow 0.15s ease;
+}
+article:hover {
+  box-shadow: 0 4px 14px rgba(47, 42, 37, 0.06);
+}
+
+/* Testata del manuale */
+.manual-header {
+  text-align: center;
+  border-bottom: 3px double var(--rule);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+.manual-header p {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  max-width: 40rem;
+  margin: 0.5rem auto;
+}
+
+/* Colonna di lettura stretta per tutte le pagine */
+body > header.container,
+body > main.container {
+  max-width: 760px;
+}
+
+/* Sezioni del manuale una sotto l'altra */
+.reading section {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.reading section:last-child {
+  border-bottom: none;
+}
+.reading h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+.reading p {
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* Elenco dei manuali compatto */
+.manual-list {
+  padding: 0;
+}
+.manual-list li {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.manual-list a {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.manual-list p {
+  margin: 0.15rem 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.manual-list small {
+  font-size: 0.75rem;
+  color: var(--muted);
+}

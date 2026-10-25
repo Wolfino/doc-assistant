@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Doc Assistant{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="{% static 'manuals/custom.css' %}">
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul><li><strong>Doc Assistant</strong></li></ul>
+      <ul>
+        <li><a href="{% url 'manuals:list' %}">Manuali</a></li>
+        <li><a href="{% url 'manuals:generate' %}">Genera</a></li>
+        <li><a href="{% url 'manuals:ask' %}">Chiedi</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    {% for message in messages %}
+      <article><strong>{{ message }}</strong></article>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
