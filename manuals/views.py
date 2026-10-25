@@ -24,9 +24,9 @@ def generate_manual(request):
         try:
             manual = create_manual_with_ai(form.cleaned_data["topic"], form.cleaned_data["sections"])
         except AIError as exc:
-            messages.error(request, f"Generazione non riuscita: {exc}")
+            messages.error(request, f"Generation failed: {exc}")
         else:
-            messages.success(request, "Manuale generato e indicizzato.")
+            messages.success(request, "Manual generated and indexed.")
             return redirect("manuals:detail", pk=manual.pk)
     return render(request, "manuals/generate.html", {"form": form})
 
@@ -41,5 +41,5 @@ def ask(request):
                 manual=form.cleaned_data["manual"],
             )
         except AIError as exc:
-            messages.error(request, f"Risposta non riuscita: {exc}")
+            messages.error(request, f"Could not get an answer: {exc}")
     return render(request, "manuals/ask.html", {"form": form, "answer": answer, "sources": sources})

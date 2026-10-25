@@ -5,53 +5,53 @@ from manuals.models import Manual, Section
 
 MANUALS = [
     {
-        "title": "Stampante 3D Forma One - Guida rapida",
-        "description": "Manuale d'uso della stampante 3D Forma One.",
+        "title": "Forma One 3D Printer - Quick Start Guide",
+        "description": "User guide for the Forma One 3D printer.",
         "sections": [
-            ("Installazione", "Posiziona la stampante su una superficie piana e stabile, lontano da correnti d'aria. Collega l'alimentatore da 24 V e accendi l'interruttore sul retro. Al primo avvio la stampante esegue una calibrazione automatica del piano che dura circa 3 minuti."),
-            ("Caricamento del filamento", "La Forma One supporta filamenti PLA e PETG da 1,75 mm. Riscalda l'ugello a 210 gradi per il PLA o 240 gradi per il PETG, poi inserisci il filamento nell'estrusore finché non esce dall'ugello. Non usare filamenti ABS: la stampante non ha una camera chiusa."),
-            ("Prima stampa", "Carica il file G-code su una scheda microSD e inseriscila nello slot frontale. Dal menu seleziona Stampa e scegli il file. Per i pezzi di prova si consiglia un'altezza di strato di 0,2 mm."),
-            ("Risoluzione dei problemi", "Se il pezzo non aderisce al piano, pulisci il piano con alcol isopropilico e ripeti la calibrazione. Se l'ugello si ostruisce, riscaldalo a 250 gradi ed esegui la procedura di pulizia dal menu Manutenzione. Il codice errore E04 indica un sensore di temperatura scollegato."),
+            ("Installation", "Place the printer on a flat, stable surface, away from drafts. Connect the 24 V power supply and turn on the switch at the back. On first start-up the printer runs an automatic bed calibration that takes about 3 minutes."),
+            ("Loading filament", "The Forma One supports 1.75 mm PLA and PETG filaments. Heat the nozzle to 210 degrees for PLA or 240 degrees for PETG, then push the filament into the extruder until it comes out of the nozzle. Do not use ABS: the printer has no enclosed chamber."),
+            ("First print", "Copy the G-code file to a microSD card and insert it into the front slot. From the menu, select Print and choose the file. For test parts, a layer height of 0.2 mm is recommended."),
+            ("Troubleshooting", "If the part does not stick to the bed, clean the bed with isopropyl alcohol and repeat the calibration. If the nozzle clogs, heat it to 250 degrees and run the cleaning procedure from the Maintenance menu. Error code E04 means the temperature sensor is disconnected."),
         ],
     },
     {
-        "title": "Router NetBox X2 - Manuale utente",
-        "description": "Configurazione e uso del router Wi-Fi NetBox X2.",
+        "title": "NetBox X2 Router - User Manual",
+        "description": "Setting up and using the NetBox X2 Wi-Fi router.",
         "sections": [
-            ("Primo accesso", "Collega il PC al router con un cavo di rete o alla rete Wi-Fi NetBox-X2. Apri il browser all'indirizzo 192.168.50.1. Le credenziali predefinite sono admin / netbox2024 e vanno cambiate al primo accesso."),
-            ("Configurazione Wi-Fi", "Il router trasmette su 2,4 GHz e 5 GHz. Dal menu Wireless puoi cambiare il nome della rete e la password. Si consiglia la protezione WPA3; per dispositivi più vecchi è disponibile la modalità mista WPA2/WPA3."),
-            ("Rete ospiti", "La rete ospiti permette di dare accesso a Internet ai visitatori senza esporre i dispositivi della rete principale. Si attiva dal menu Wireless > Ospiti e può essere limitata a una durata da 1 a 24 ore."),
-            ("Ripristino di fabbrica", "Per riportare il router alle impostazioni di fabbrica, tieni premuto il tasto Reset sul retro per 10 secondi finché le spie non lampeggiano. Tutte le configurazioni verranno cancellate."),
+            ("First login", "Connect your computer to the router with a network cable or to the NetBox-X2 Wi-Fi network. Open a browser at 192.168.50.1. The default credentials are admin / netbox2024 and must be changed at first login."),
+            ("Wi-Fi setup", "The router broadcasts on 2.4 GHz and 5 GHz. From the Wireless menu you can change the network name and password. WPA3 security is recommended; a mixed WPA2/WPA3 mode is available for older devices."),
+            ("Guest network", "The guest network gives visitors Internet access without exposing the devices on your main network. Enable it from Wireless > Guests; access can be limited to between 1 and 24 hours."),
+            ("Factory reset", "To restore the router to factory settings, hold the Reset button on the back for 10 seconds until the lights flash. All settings will be erased."),
         ],
     },
     {
-        "title": "TurniPro - Guida per gli amministratori",
-        "description": "Gestione dei turni di lavoro con l'applicazione TurniPro.",
+        "title": "ShiftPro - Administrator Guide",
+        "description": "Managing work shifts with the ShiftPro application.",
         "sections": [
-            ("Creare un reparto", "Dal menu Impostazioni > Reparti clicca Nuovo reparto, inserisci il nome e il responsabile. Ogni dipendente può appartenere a un solo reparto alla volta."),
-            ("Pianificare i turni", "Nella vista Calendario trascina un dipendente sulla fascia oraria desiderata. TurniPro segnala in rosso i turni che superano le 10 ore giornaliere o che non rispettano le 11 ore di riposo tra un turno e l'altro."),
-            ("Richieste di ferie", "I dipendenti inviano le richieste di ferie dall'app mobile. L'amministratore riceve una notifica e può approvarle o rifiutarle dalla sezione Richieste. Le ferie approvate vengono bloccate automaticamente nel calendario."),
-            ("Esportazione dei dati", "Dalla sezione Report puoi esportare le ore lavorate in formato CSV o Excel, filtrando per reparto e periodo. L'esportazione è disponibile solo per gli utenti con ruolo Amministratore."),
+            ("Creating a department", "From Settings > Departments, click New department and enter its name and manager. Each employee can belong to only one department at a time."),
+            ("Planning shifts", "In the Calendar view, drag an employee onto the desired time slot. ShiftPro highlights in red any shift longer than 10 hours a day or with less than 11 hours of rest between shifts."),
+            ("Leave requests", "Employees send leave requests from the mobile app. The administrator receives a notification and can approve or reject them from the Requests section. Approved leave is automatically blocked out in the calendar."),
+            ("Exporting data", "From the Reports section you can export hours worked as CSV or Excel, filtered by department and period. Export is only available to users with the Administrator role."),
         ],
     },
 ]
 
 
 class Command(BaseCommand):
-    help = "Crea manuali di esempio con sezioni per lo sviluppo."
+    help = "Create sample manuals with sections for development."
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--reset",
             action="store_true",
-            help="Cancella tutti i manuali esistenti prima di crearne di nuovi.",
+            help="Delete all existing manuals before creating new ones.",
         )
 
     @transaction.atomic
     def handle(self, *args, **options):
         if options["reset"]:
             deleted, _ = Manual.objects.all().delete()
-            self.stdout.write(f"Cancellati {deleted} oggetti esistenti.")
+            self.stdout.write(f"Deleted {deleted} existing objects.")
 
         for data in MANUALS:
             manual, created = Manual.objects.get_or_create(
@@ -59,10 +59,10 @@ class Command(BaseCommand):
                 defaults={"description": data["description"]},
             )
             if not created:
-                self.stdout.write(f"Già presente, salto: {manual.title}")
+                self.stdout.write(f"Already exists, skipping: {manual.title}")
                 continue
 
             for order, (title, content) in enumerate(data["sections"], start=1):
                 Section.objects.create(manual=manual, title=title, content=content, order=order)
 
-            self.stdout.write(self.style.SUCCESS(f"Creato: {manual.title}"))
+            self.stdout.write(self.style.SUCCESS(f"Created: {manual.title}"))

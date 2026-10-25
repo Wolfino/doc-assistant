@@ -4,7 +4,7 @@
   <header class="manual-header">
     <h1>{{ manual.title }}</h1>
     <p>{{ manual.description }}</p>
-    <small>{{ manual.sections.count }} sezioni · {{ manual.created_at|date:"d F Y" }}</small>
+    <small>{{ manual.sections.count }} sections · {{ manual.created_at|date:"F j, Y" }}</small>
   </header>
 
   <div class="reading">
@@ -16,5 +16,5 @@
     {% endfor %}
   </div>
 
-  <p class="center"><a href="{% url 'manuals:ask' %}" role="button" class="outline">Fai una domanda</a></p>
+  <p class="center"><a href="{% url 'manuals:ask' %}" role="button" class="outline">Ask a question</a></p>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="it">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,9 +13,9 @@
     <nav>
       <ul><li><strong>Doc Assistant</strong></li></ul>
       <ul>
-        <li><a href="{% url 'manuals:list' %}">Manuali</a></li>
-        <li><a href="{% url 'manuals:generate' %}">Genera</a></li>
-        <li><a href="{% url 'manuals:ask' %}">Chiedi</a></li>
+        <li><a href="{% url 'manuals:list' %}">Manuals</a></li>
+        <li><a href="{% url 'manuals:generate' %}">Generate</a></li>
+        <li><a href="{% url 'manuals:ask' %}">Ask</a></li>
       </ul>
     </nav>
   </header>

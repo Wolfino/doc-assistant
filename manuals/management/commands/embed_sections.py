@@ -6,10 +6,10 @@ from manuals.rag import index_sections
 
 
 class Command(BaseCommand):
-    help = "Calcola gli embedding delle sezioni che non li hanno ancora."
+    help = "Compute embeddings for sections that don't have one yet."
 
     def add_arguments(self, parser):
-        parser.add_argument("--all", action="store_true", help="Ricalcola gli embedding di tutte le sezioni.")
+        parser.add_argument("--all", action="store_true", help="Recompute embeddings for all sections.")
 
     def handle(self, *args, **options):
         queryset = Section.objects.all() if options["all"] else Section.objects.filter(embedding__isnull=True)
@@ -17,4 +17,4 @@ class Command(BaseCommand):
             count = index_sections(queryset)
         except AIError as exc:
             raise CommandError(str(exc)) from exc
-        self.stdout.write(self.style.SUCCESS(f"Sezioni indicizzate: {count}"))
+        self.stdout.write(self.style.SUCCESS(f"Sections indexed: {count}"))

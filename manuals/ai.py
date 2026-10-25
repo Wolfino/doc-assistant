@@ -1,10 +1,12 @@
+"""Client for the Ollama API: chat, embeddings and manual generation."""
+
 import json
 import os
 
 import requests
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://ollama:11434")
-CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
+CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "gemma3:12b")
 EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "bge-m3")
 
 MANUAL_SCHEMA = {
@@ -29,11 +31,11 @@ MANUAL_SCHEMA = {
 
 
 class AIError(Exception):
-    """Errore nella comunicazione con il modello di AI."""
+    """Raised when the AI model cannot be reached or returns an invalid response."""
 
 
 def chat(messages, schema=None, temperature=0.4, timeout=300):
-    """Invia una conversazione a Ollama e restituisce il testo della risposta."""
+    """Send a conversation to Ollama and return the response text."""
     payload = {
         "model": CHAT_MODEL,
         "messages": messages,
@@ -47,32 +49,32 @@ def chat(messages, schema=None, temperature=0.4, timeout=300):
         response = requests.post(f"{OLLAMA_URL}/api/chat", json=payload, timeout=timeout)
         response.raise_for_status()
     except requests.RequestException as exc:
-        raise AIError(f"Impossibile contattare Ollama: {exc}") from exc
+        raise AIError(f"Could not reach Ollama: {exc}") from exc
 
     return response.json()["message"]["content"]
 
 
 def generate_manual_data(topic, sections=4):
-    """Chiede al modello un manuale sul tema indicato e lo restituisce come dizionario."""
+    """Ask the model for a manual about the given topic and return it as a dict."""
     messages = [
         {
             "role": "system",
             "content": (
-                "Sei un redattore tecnico esperto. Scrivi manuali d'uso in italiano corretto, "
-                "chiari e realistici. Rivolgiti sempre al lettore con il tu e l'imperativo "
-                "(es. 'premi', 'inserisci'). Non inventare componenti assurdi: descrivi "
-                "funzioni plausibili per il prodotto."
+                "You are an experienced technical writer. Write clear, realistic user manuals "
+                "in correct English. Always address the reader directly using the imperative "
+                "(e.g. 'press', 'insert'). Do not invent absurd components: describe features "
+                "that are plausible for the product."
             ),
         },
         {
             "role": "user",
             "content": (
-                f"Scrivi un manuale d'uso per: {topic}.\n"
-                f"- Una descrizione del manuale di 1-2 frasi.\n"
-                f"- Esattamente {sections} sezioni.\n"
-                "- Ogni sezione ha un titolo breve e un testo di 3-5 frasi con istruzioni "
-                "pratiche e dettagli concreti, come valori, impostazioni e nomi dei menu.\n"
-                "Rispondi solo con il JSON richiesto."
+                f"Write a user manual for: {topic}.\n"
+                "- A 1-2 sentence description of the manual.\n"
+                f"- Exactly {sections} sections.\n"
+                "- Each section has a short title and 3-5 sentences of practical instructions "
+                "with concrete details, such as values, settings and menu names.\n"
+                "Reply only with the requested JSON."
             ),
         },
     ]
@@ -82,19 +84,19 @@ def generate_manual_data(topic, sections=4):
     try:
         data = json.loads(content)
     except json.JSONDecodeError as exc:
-        raise AIError("Il modello non ha restituito un JSON valido.") from exc
+        raise AIError("The model did not return valid JSON.") from exc
 
     if not data.get("sections"):
-        raise AIError("Il modello non ha generato nessuna sezione.")
-
+        raise AIError("The model did not generate any sections.")
     if not data.get("description", "").strip():
-        raise AIError("Il modello non ha generato la descrizione.")
+        raise AIError("The model did not generate a description.")
 
     data["sections"] = data["sections"][:sections]
     return data
 
+
 def embed(texts, timeout=120):
-    """Trasforma una lista di testi in una lista di vettori."""
+    """Turn a list of texts into a list of embedding vectors."""
     try:
         response = requests.post(
             f"{OLLAMA_URL}/api/embed",
@@ -103,6 +105,6 @@ def embed(texts, timeout=120):
         )
         response.raise_for_status()
     except requests.RequestException as exc:
-        raise AIError(f"Impossibile calcolare gli embedding: {exc}") from exc
+        raise AIError(f"Could not compute embeddings: {exc}") from exc
 
     return response.json()["embeddings"]

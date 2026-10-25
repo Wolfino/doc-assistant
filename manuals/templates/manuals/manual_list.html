@@ -1,16 +1,16 @@
 {% extends "manuals/base.html" %}
-{% block title %}Manuali{% endblock %}
+{% block title %}Manuals{% endblock %}
 {% block content %}
-  <h1>Manuali</h1>
+  <h1>Manuals</h1>
   <ul class="manual-list">
     {% for manual in manuals %}
       <li>
         <a href="{% url 'manuals:detail' manual.pk %}">{{ manual.title }}</a>
         <p>{{ manual.description }}</p>
-        <small>{{ manual.sections.count }} sezioni · {{ manual.created_at|date:"d/m/Y" }}</small>
+        <small>{{ manual.sections.count }} sections · {{ manual.created_at|date:"M j, Y" }}</small>
       </li>
     {% empty %}
-      <li>Nessun manuale. <a href="{% url 'manuals:generate' %}">Generane uno con l'AI</a>.</li>
+      <li>No manuals yet. <a href="{% url 'manuals:generate' %}">Generate one with AI</a>.</li>
     {% endfor %}
   </ul>
 {% endblock %}

@@ -1,3 +1,5 @@
+"""Business logic shared by management commands and web views."""
+
 from django.db import transaction
 
 from .ai import generate_manual_data
@@ -6,7 +8,7 @@ from .rag import index_sections
 
 
 def create_manual_with_ai(topic, sections=4):
-    """Genera un manuale con l'AI, lo salva e indicizza le sezioni. Restituisce il manuale."""
+    """Generate a manual with the AI, save it and index its sections. Return the manual."""
     data = generate_manual_data(topic, sections)
 
     with transaction.atomic():

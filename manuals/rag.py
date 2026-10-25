@@ -1,3 +1,5 @@
+"""Retrieval-augmented generation: indexing, semantic search and grounded answers."""
+
 from pgvector.django import CosineDistance
 
 from .ai import chat, embed
@@ -8,12 +10,12 @@ MAX_DISTANCE = 0.6
 
 
 def section_text(section):
-    """Il testo da cui si calcola l'embedding: manuale, titolo e contenuto."""
+    """Text used to compute a section's embedding: manual title, section title and content."""
     return f"{section.manual.title}\n{section.title}\n{section.content}"
 
 
 def index_sections(queryset):
-    """Calcola e salva gli embedding delle sezioni indicate. Restituisce quante ne ha indicizzate."""
+    """Compute and store embeddings for the given sections. Return how many were indexed."""
     sections = list(queryset.select_related("manual"))
 
     for start in range(0, len(sections), BATCH_SIZE):
@@ -27,7 +29,7 @@ def index_sections(queryset):
 
 
 def search_sections(question, k=4, manual=None, max_distance=MAX_DISTANCE):
-    """Trova le k sezioni più vicine alla domanda, entro la distanza massima."""
+    """Return the k sections closest in meaning to the question, within the distance threshold."""
     [question_vector] = embed([question])
 
     queryset = Section.objects.select_related("manual").exclude(embedding__isnull=True)
@@ -42,10 +44,10 @@ def search_sections(question, k=4, manual=None, max_distance=MAX_DISTANCE):
 
 
 def answer_question(question, k=4, manual=None):
-    """Risponde alla domanda usando solo le sezioni trovate. Restituisce risposta e fonti."""
+    """Answer the question using only the retrieved sections. Return the answer and its sources."""
     sections = search_sections(question, k, manual)
     if not sections:
-        return "Non ho trovato informazioni su questo argomento nei manuali.", []
+        return "I couldn't find any information about this in the manuals.", []
 
     sources = "\n\n".join(
         f"[{i}] {section.manual.title} - {section.title}\n{section.content}"
@@ -56,13 +58,13 @@ def answer_question(question, k=4, manual=None):
         {
             "role": "system",
             "content": (
-                "Sei un assistente che risponde a domande sui manuali d'uso. "
-                "Rispondi in italiano usando SOLO le informazioni contenute nelle fonti. "
-                "Se le fonti non contengono la risposta, dillo chiaramente senza inventare. "
-                "Cita tra parentesi quadre solo le fonti che hai usato davvero, ad esempio [1]."
+                "You are an assistant that answers questions about user manuals. "
+                "Answer in the same language as the question, using ONLY the information in the sources. "
+                "If the sources do not contain the answer, say so clearly without making anything up. "
+                "Cite in square brackets only the sources you actually used, for example [1]."
             ),
         },
-        {"role": "user", "content": f"Fonti:\n{sources}\n\nDomanda: {question}"},
+        {"role": "user", "content": f"Sources:\n{sources}\n\nQuestion: {question}"},
     ]
 
     answer = chat(messages, temperature=0.2)
